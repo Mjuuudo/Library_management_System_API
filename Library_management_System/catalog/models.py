@@ -11,7 +11,7 @@ class Author(models.Model) :
         return f"Author name : {self.name}"
     
 class Book(models.Model) :
-    book_name = models.CharField( max_length = 200 )
+    title  = models.CharField( max_length = 200 )
     author = models.ForeignKey(Author, on_delete=models.CASCADE)
     isbn = models.CharField(max_length=13, unique=True)
     published_date = models.DateField(blank=True, null=True)
