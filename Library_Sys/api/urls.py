@@ -1,5 +1,5 @@
 from django.urls import path, include
-
+from .auth_views import register, login, logout
 from .views import *
 
 urlpatterns = [
@@ -18,6 +18,11 @@ urlpatterns = [
     #End points for Borrowing
     path('borrowings/', BorrowingListCreateView.as_view(), name='borrowing-list-create'),
     path('borrowings/<int:pk>/', BorrowingRetrieveUpdateDestroyView.as_view(), name='borrowing-detail'),
+
+    # Authentication Endpoints
+    path('register/', register, name='register'),
+    path('login/', login, name='login'),
+    path('logout/', logout, name='logout'),
 
 
 ]
