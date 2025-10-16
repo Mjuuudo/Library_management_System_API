@@ -16,29 +16,32 @@ class AuthorSerializer(serializers.ModelSerializer) :
         model = Author
         fields = ['id', 'full_name', 'Birth_Year']
 
-class BookSerializer(serializers.ModelSerializer) :
-    Author = AuthorSerializer(read_only=True)
-    
-    class Meta :
+class BookSerializer(serializers.ModelSerializer):
+    Author = serializers.PrimaryKeyRelatedField(
+        queryset=Author.objects.all()
+    )
+
+    class Meta:
         model = Book
         fields = ['id', 'Book_title', 'Author', 'posted_Date', 'Number_of_Copies', 'Is_Alvalible']
 
-class BorrowingSerializer(serializers.ModelSerializer) :
-    Book = BookSerializer(read_only=True)
+class BorrowingSerializer(serializers.ModelSerializer):
+    book = BookSerializer(read_only=True)
     Client = UserSerializer(read_only=True)
-    
-    class Meta :
-        model = Borrowing
-        fields = ['id', 'Book', 'Client', 'Borrow_Date', 'Return_Date', 'Returned']
+    # Books = Book.objects.all()
+    Book_id = serializers.PrimaryKeyRelatedField(
+        queryset = Book.objects.all(),
+        source='Book',          # tells DRF this field actually sets the 'Book' model field
+        write_only=True
+    )
 
-    def create(self, validated_data):
-        request = self.context.get('request')
-        user = request.user if request else None
-        borrowing = Borrowing.objects.create(Client=user, **validated_data)
-        return borrowing
+    class Meta:
+        model = Borrowing
+        fields = ['id', 'book', 'Book_id', 'Client', 'Borrow_Date', 'Return_Date', 'Returned']
 
     def validate(self, data):
-        book = data.get('Book')
+        book = data.get('book')
         if book and not book.Is_Alvalible:
-                raise serializers.ValidationError("This book is currently not available for borrowing.")
+            raise serializers.ValidationError("This book is currently not available for borrowing.")
         return data
+    

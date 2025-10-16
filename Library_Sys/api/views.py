@@ -12,7 +12,7 @@ class UserListCreateView(ListCreateAPIView) :
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    
+
 
 class UserRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView) :
     queryset = User.objects.all()
@@ -54,17 +54,15 @@ class BookRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView) :
         return [permissions.IsAdminUser()]
 
 
-class BorrowingListCreateView(ListCreateAPIView) :
+class BorrowingListCreateView(ListCreateAPIView):
     queryset = Borrowing.objects.all()
     serializer_class = BorrowingSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        # A user can only see their own borrowings
         return Borrowing.objects.filter(Client=self.request.user)
 
     def perform_create(self, serializer):
-        # Automatically set the logged-in user as the client
         serializer.save(Client=self.request.user)
 
 class BorrowingRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView) :
