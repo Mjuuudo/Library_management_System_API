@@ -1,6 +1,11 @@
 from django.urls import path, include
-from .auth_views import register, login, logout
+from .auth_views import Register#, login, logout
 from .views import *
+
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 urlpatterns = [
     #End points for User
@@ -20,9 +25,11 @@ urlpatterns = [
     path('borrowings/<int:pk>/', BorrowingRetrieveUpdateDestroyView.as_view(), name='borrowing-detail'),
 
     # Authentication Endpoints
-    path('register/', register, name='register'),
-    path('login/', login, name='login'),
-    path('logout/', logout, name='logout'),
+    path('register/', Register.as_view(), name='register'),
+
+    # JWT Authentication Endpoints
+    path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
 
 ]

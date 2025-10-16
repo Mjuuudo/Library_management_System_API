@@ -32,18 +32,38 @@ class AuthorRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView) :
 class BookListCreateView(ListCreateAPIView) :
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    
+    def get_permissions(self):
+        # Anyone can list books, only admin/staff can create
+        if self.request.method == 'GET':
+            return [permissions.AllowAny()]
+        return [permissions.IsAdminUser()]
 
 
 class BookRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView) :
     queryset = Book.objects.all()
     serializer_class = BookSerializer
-    permission_classes = [permissions.AllowAny]
+
+
+    def get_permissions(self):
+        # Anyone can list books, only admin/staff can create
+        if self.request.method == 'GET':
+            return [permissions.AllowAny()]
+        return [permissions.IsAdminUser()]
 
 
 class BorrowingListCreateView(ListCreateAPIView) :
     queryset = Borrowing.objects.all()
     serializer_class = BorrowingSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # A user can only see their own borrowings
+        return Borrowing.objects.filter(Client=self.request.user)
+
+    def perform_create(self, serializer):
+        # Automatically set the logged-in user as the client
+        serializer.save(Client=self.request.user)
 
 class BorrowingRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView) :
     queryset = Borrowing.objects.all()
