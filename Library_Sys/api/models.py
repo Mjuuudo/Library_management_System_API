@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser) :
     email = models.EmailField(unique= True)
-    Is_Borrowing = models.BooleanField()
+    Is_Borrowing = models.BooleanField(default=True)
 
     def __str__ (self) :
         return f"Username : {self.username} with email : {self.email}"
