@@ -22,7 +22,8 @@ urlpatterns = [
 
     #End points for Borrowing
     path('borrowings/', BorrowingListCreateView.as_view(), name='borrowing-list-create'),
-    path('borrowings/<int:pk>/', BorrowingRetrieveUpdateDestroyView.as_view(), name='borrowing-detail'),
+    path('borrowing/<int:pk>/', BorrowingRetrieveUpdateDestroyView.as_view(), name='borrowing-detail'),
+    
 
     # Authentication Endpoints
     path('register/', Register.as_view(), name='register'),

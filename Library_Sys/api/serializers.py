@@ -30,3 +30,15 @@ class BorrowingSerializer(serializers.ModelSerializer) :
     class Meta :
         model = Borrowing
         fields = ['id', 'Book', 'Client', 'Borrow_Date', 'Return_Date', 'Returned']
+
+    def create(self, validated_data):
+        request = self.context.get('request')
+        user = request.user if request else None
+        borrowing = Borrowing.objects.create(Client=user, **validated_data)
+        return borrowing
+
+    def validate(self, data):
+        book = data.get('Book')
+        if book and not book.Is_Alvalible:
+                raise serializers.ValidationError("This book is currently not available for borrowing.")
+        return data

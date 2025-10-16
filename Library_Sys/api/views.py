@@ -12,6 +12,8 @@ class UserListCreateView(ListCreateAPIView) :
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    
+
 class UserRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView) :
     queryset = User.objects.all()
     serializer_class = UserSerializer
@@ -68,4 +70,5 @@ class BorrowingListCreateView(ListCreateAPIView) :
 class BorrowingRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView) :
     queryset = Borrowing.objects.all()
     serializer_class = BorrowingSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
