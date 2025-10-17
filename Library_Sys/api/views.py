@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import User, Author, Book, Borrowing
-from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from .serializers import UserSerializer, AuthorSerializer, BookSerializer, BorrowingSerializer
+from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView, ListAPIView
+from .serializers import *
 from rest_framework import permissions
 
 
@@ -52,6 +52,11 @@ class BookRetrieveUpdateDestroyView(RetrieveUpdateDestroyAPIView) :
         if self.request.method == 'GET':
             return [permissions.AllowAny()]
         return [permissions.IsAdminUser()]
+    
+class BookAlvalibleShowAPIView(ListAPIView):
+    queryset = Book.objects.filter(Number_of_Copies__gt=0)
+    serializer_class = BookAlvalibleShowSerializer
+    permission_classes = [permissions.AllowAny]
 
 
 class BorrowingListCreateView(ListCreateAPIView):

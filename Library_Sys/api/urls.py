@@ -19,6 +19,7 @@ urlpatterns = [
     #End points for Book
     path('books/', BookListCreateView.as_view(), name='book-list-create'),
     path('books/<int:pk>/', BookRetrieveUpdateDestroyView.as_view(), name='book-detail'),
+    path('books/available/', BookAlvalibleShowAPIView.as_view(), name='book-available-list'),
 
     #End points for Borrowing
     path('borrowings/', BorrowingListCreateView.as_view(), name='borrowing-list-create'),

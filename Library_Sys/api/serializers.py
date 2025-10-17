@@ -25,6 +25,13 @@ class BookSerializer(serializers.ModelSerializer):
         model = Book
         fields = ['id', 'Book_title', 'Author', 'posted_Date', 'Number_of_Copies', 'Is_Alvalible']
 
+class BookAlvalibleShowSerializer(serializers.ModelSerializer):
+    Author = AuthorSerializer(read_only=True)
+
+    class Meta:
+        model = Book
+        fields = ['id', 'Book_title', 'Author', 'posted_Date', 'Number_of_Copies', 'Is_Alvalible']
+
 class BorrowingSerializer(serializers.ModelSerializer):
     book = BookSerializer(read_only=True)
     Client = UserSerializer(read_only=True)
